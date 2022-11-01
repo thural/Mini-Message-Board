@@ -1,14 +1,19 @@
 extends layout 
 
 block content
-  a(href="/new") create new message
-  div(class="message-board")
-    h1= title
-    
-    each message in messages    
-      div(class="message-card")
-        p#date #{message.date_formatted}
-        h3 #{message.name}
-        p #{message.message}
-    else
-      p There are no messages.
+  if user
+    a(href="/new") create new message
+    div(class="message-board")
+      h1= title
+      
+      each message in messages    
+        div(class="message-card")
+          p#date #{message.date_formatted}
+          h3 #{message.name}
+          p #{message.message}
+      else
+        p There are no messages.
+      a(href="/log-out") log-out
+  else
+    p You have not logged in
+    a(href="/log-in") log-in

@@ -1,9 +1,10 @@
 const express = require('express');
 const session = require("express-session");
 const passport = require("passport");
+const logger = require('morgan');
+const path = require('path');
+const User = require("./models/user")
 const LocalStrategy = require("passport-local").Strategy;
-var logger = require('morgan');
-var path = require('path');
 
 // import routes
 const index = require('./routes/index');
@@ -25,6 +26,32 @@ const app = express();
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
+//Passport LocalStrategy
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+      return done(null, user);
+    });
+  })
+);
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+// use login session from passport middleware
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -40,34 +67,6 @@ app.use(logger('dev'));
 
 // use index router
 app.use('/', index)
-
-// // repond to a post method from a form submission
-// app.post('/login', authorize, (request, response) => {
-//   const options = {
-//     root: __dirname + "/private",
-//     dotfiles: 'deny',
-//     headers: {
-//       'x-timestamp': Date.now(),
-//       'x-sent': true
-//     }
-//   };
-//   const fileName = "query.html";
-//   response.sendFile(fileName, options, err => {
-//     if (err) next(err)
-//     else console.log('Sent:', fileName)
-//   })
-// })
-
-// // Get data using a query
-// app.get('/api/:collection/query?', (request, response) => {
-//   const query = request.query;
-//   const { collection } = request.params;
-//   const documents = db[collection].filter(elem => {
-//     return (Object.keys(query)).every(tag => query[tag] == elem[tag])
-//   });
-//   if (!documents.length) return response.status(200).json({ success: true, data: [] });
-//   response.status(200).json(documents);
-// })
 
 app.all('*', (request, response) => {
   response.status(404).send('Error 404, Page not found');

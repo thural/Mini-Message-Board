@@ -4,18 +4,32 @@ const router = express.Router();
 const message = require("../controllers/message");
 const user = require("../controllers/user")
 
-// requests for creating a Message.
+// request for default route
 router.route("/")
-.get(message.list);
+.get(message.board);
+
+// request for logging-in
+router.route("/log-in")
+.get(user.login_get)
+.post(user.login_post);
 
 // requests for creating a User
 router.route("/sign-up")
 .get(user.create_get)
 .post(user.create_post);
 
-// requests for creating a Message.
+// requests for creating a Message
 router.route("/new")
 .get(message.create_get)
 .post(message.create_post);
+
+// request for logging-out
+router.route("/log-out",)
+.get((req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err);
+    res.redirect("/");
+  });
+});
 
 module.exports = router

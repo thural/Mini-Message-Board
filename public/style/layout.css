@@ -19,7 +19,10 @@ message-form, .message-board {
   gap: 10px;
 }
 
-.message-form, .message-card {
+.message-form,
+.message-card,
+.signup-fom,
+.login-form {
   display: flex;
   min-width: 300px;
   flex-flow: column nowrap;

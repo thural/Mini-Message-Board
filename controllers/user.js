@@ -2,6 +2,21 @@
 const User = require("../models/user")
 // Import validators
 const { body, validationResult } = require("express-validator");
+// Inport passport authenticator
+const passport = require("passport");
+
+// Handle user log-in on GET.
+exports.login_get = (req, res) => res.render("login_form", {
+  title: "Please log-in",
+  user: { username: "", password: "" },
+  errors: null,
+});
+
+// Handle user log-in on POST
+exports.login_post = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/log-in"
+});
 
 // Handle user create on GET.
 exports.create_get = (req, res) => res.render("signup_form", {
@@ -40,7 +55,7 @@ exports.create_post = [
             res.render("signup_form", {
               title: "Create User",
               user,
-              errors: ["User with same name already exists"],
+              errors: [{msg:"User with same name already exists"}],
             }) // render the formagain witht he error message
           } // redirect to message board.
           else {

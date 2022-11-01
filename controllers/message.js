@@ -5,16 +5,18 @@ const Message = require("../models/message");
 const { body, validationResult } = require("express-validator");
 
 
-// Display list of all Authors.
-exports.list = (req, res, next) => {
+// Display list of all Messages.
+exports.board = (req, res, next) => {
   Message.find()
     .sort([["date", "descending"]])
     .exec((err, messages) => {
       if (err) return next(err);
       //Successful, so render
+      //console.log("user:", user)
       res.render("message_board", {
-        title: "Message List",
+        title: "Message Board",
         messages,
+        user: req.user
       });
     })
 };

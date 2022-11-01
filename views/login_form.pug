@@ -3,11 +3,11 @@ extends layout
 block content
   h1 #{title}
 
-  form(class='signup-form', method='POST', action='')
+  form(class='login-form', method='POST', action='/log-in')
     div.input-area
       input.form-input(type='text', name='username', placeholder="username", value=user.username)
       input.form-input(type='password', name='password', placeholder="password", value=user.password)
-    button(class="submit-btn", type='submit') Sign-up
+    button(class="submit-btn", type='submit') Log-in
 
   if errors
    ul
