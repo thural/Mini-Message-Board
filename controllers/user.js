@@ -70,13 +70,3 @@ exports.create_post = [
     }
   },
 ];
-
-// exports.create_post = (req, res, next) => {
-//   const user = new User({
-//     username: req.body.username,
-//     password: req.body.password
-//   }).save(err => {
-//     if (err) return next(err);
-//     res.redirect("/");
-//   });
-// }
