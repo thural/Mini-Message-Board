@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  form(class='signup-form', method='POST', action='')
+    div.input-area
+      input.form-input(type='text', name='username', placeholder="username", value=user.username)
+      input.form-input(type='password', name='password', placeholder="password", value=user.password)
+    button(class="submit-btn", type='submit') Submit
+
+  if errors
+   ul
+    for error in errors
+     li!= error.msg

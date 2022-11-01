@@ -1,4 +1,7 @@
 const express = require('express');
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 var logger = require('morgan');
 var path = require('path');
 
@@ -7,8 +10,9 @@ const index = require('./routes/index');
 
 // Set up default mongoose connection
 const mongoose = require('mongoose')
-const dbURL = 'mongodb+srv://thural:aloeseed963@cluster0.rlei7la.mongodb.net/message_board?retryWrites=true&w=majority'
-mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true });
+const dev_db_url = "mongodb+srv://thural:<password>@cluster0.rlei7la.mongodb.net/message_board?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 // Get the default connection
 const db = mongoose.connection;
 // Bind connection to error event (to get notification of connection errors)
@@ -21,6 +25,9 @@ const app = express();
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // static file server
 app.use(express.static(path.join(__dirname, 'public')));
