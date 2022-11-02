@@ -6,14 +6,16 @@ const path = require('path');
 const User = require("./models/user")
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
+const dotenv = require('dotenv');
+
+dotenv.config() // load env variables into process.env
 
 // import routes
 const index = require('./routes/index');
 
 // Set up default mongoose connection
 const mongoose = require('mongoose')
-const dev_db_url = "mongodb+srv://thural:<password>@cluster0.rlei7la.mongodb.net/message_board?retryWrites=true&w=majority";
-const mongoDB = process.env.MONGODB_URI || dev_db_url;
+const mongoDB = process.env.MONGODB_URI || process.env.DEV_DB_URL;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 // Get the default connection
 const db = mongoose.connection;
