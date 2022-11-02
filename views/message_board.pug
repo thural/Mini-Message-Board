@@ -2,6 +2,7 @@ extends layout
 
 block content
   if user
+    h1 Welcome back #{user.username}
     a(href="/new") create new message
     div(class="message-board")
       h1= title
@@ -15,5 +16,7 @@ block content
         p There are no messages.
       a(href="/log-out") log-out
   else
-    p You have not logged in
-    a(href="/log-in") log-in
+    h4 You have not logged in
+    a(href="/log-in") Login
+    h4 Don't have an account?
+    a(href="/sign-up") Signup

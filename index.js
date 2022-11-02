@@ -43,11 +43,11 @@ passport.use(
     });
   })
 );
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
     done(err, user);
   });
 });
@@ -55,6 +55,13 @@ passport.deserializeUser(function (id, done) {
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// TODO: limit the user scope to a specific route
+// // make current user globally available
+// app.use(function(req, res, next) {
+//   res.locals.currentUser = req.user;
+//   next();
+// });
 
 // static file server
 app.use(express.static(path.join(__dirname, 'public')));

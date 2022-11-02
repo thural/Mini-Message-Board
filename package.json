@@ -19,6 +19,7 @@
   "homepage": "https://github.com/thural/Mini-Message-Board#readme",
   "dependencies": {
     "async": "^3.2.4",
+    "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",

@@ -4,6 +4,7 @@ const User = require("../models/user")
 const { body, validationResult } = require("express-validator");
 // Inport passport authenticator
 const passport = require("passport");
+const bcrypt = require("bcryptjs");
 
 // Handle user log-in on GET.
 exports.login_get = (req, res) => res.render("login_form", {
@@ -55,15 +56,22 @@ exports.create_post = [
             res.render("signup_form", {
               title: "Create User",
               user,
-              errors: [{msg:"User with same name already exists"}],
+              errors: [{ msg: "User with same name already exists" }],
             }) // render the formagain witht he error message
           } // redirect to message board.
           else {
-            // all ok, attempt saving to db
-            user.save((err) => {
+            // all ok, attempt saving to db using encription
+            bcrypt.hash(user.password, 10, (err, hashedPassword) => {
+              // if err, do something
               if (err) return next(err);
-              // User saved. Redirect to message board page.
-              res.redirect('/');
+              // otherwise, assign hashedPassword to userpassword
+              user.password = hashedPassword;
+              // save user with hashed passsword
+              user.save((err) => {
+                if (err) return next(err);
+                // User saved. Redirect to message board page.
+                res.redirect('/');
+              });
             });
           }
         });
