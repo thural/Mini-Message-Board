@@ -4,19 +4,20 @@ block content
   if user
     h1 Welcome back #{user.username}
     a(href="/new") create new message
-    div(class="message-board")
-      h1= title
-      
-      each message in messages    
-        div(class="message-card")
-          p#date #{message.date_formatted}
-          h3 #{message.name}
-          p #{message.message}
-      else
-        p There are no messages.
-      a(href="/log-out") log-out
   else
-    h4 You have not logged in
+    h4 Please login to add a message
     a(href="/log-in") Login
-    h4 Don't have an account?
-    a(href="/sign-up") Signup
+
+  div(class="message-board")
+    h1= title  
+    each message in messages    
+      div(class="message-card")
+        p#date #{message.date_formatted}
+        if user
+          h3 #{message.name}
+        else
+          h3 private member
+        p #{message.message}
+    else
+      p There are no messages.
+    a(href="/log-out") log-out
