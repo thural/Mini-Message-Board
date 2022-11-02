@@ -5,6 +5,7 @@ const logger = require('morgan');
 const path = require('path');
 const User = require("./models/user")
 const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcryptjs");
 
 // import routes
 const index = require('./routes/index');
@@ -30,16 +31,15 @@ app.set('view engine', 'pug');
 passport.use(
   new LocalStrategy((username, password, done) => {
     User.findOne({ username: username }, (err, user) => {
-      if (err) {
-        return done(err);
-      }
+      if (err) return done(err);
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
-      }
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, user);
+      };
+      // validate password against encryption password
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (!res) return done(null, false, { message: "Incorrect password" })
+        else return done(null, user);
+      })
     });
   })
 );
@@ -57,7 +57,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // TODO: limit the user scope to a specific route
-// // make current user globally available
+// // makes current user globally available
 // app.use(function(req, res, next) {
 //   res.locals.currentUser = req.user;
 //   next();

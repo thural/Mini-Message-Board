@@ -16,7 +16,7 @@ exports.login_get = (req, res) => res.render("login_form", {
 // Handle user log-in on POST
 exports.login_post = passport.authenticate("local", {
   successRedirect: "/",
-  failureRedirect: "/log-in"
+  failureRedirect: "/log-in" // TODO: try to include error message on login page
 });
 
 // Handle user create on GET.
