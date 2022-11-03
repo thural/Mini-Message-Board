@@ -1,0 +1,26 @@
+.overlay(onclick="hideForm()")
+form(class="delete-form" method="post" action="")
+  p Do you really want to delete?
+  .btns
+    button(type="button" onclick="hideForm()") cancel
+    button(type="submit" onclick="hideForm()") confirm
+
+// always place script after declring the dom elements
+script.
+  const deleteForm = document.querySelector('.delete-form');
+  const overlay = document.querySelector('.overlay');
+  function hideForm() {
+    deleteForm.classList.remove('active')
+    overlay.classList.remove('active')
+  };
+  //- function cancelForm() {
+  //-   deleteForm.setAttribute('action', "")
+  //-   deleteForm.classList.remove('active')
+  //-   overlay.classList.remove('active')
+  //- }
+  function handleDelete(id){
+    console.log("delete pressed")
+    overlay.classList.toggle('active');
+    deleteForm.classList.toggle('active');
+    deleteForm.setAttribute('action', `/delete/${id}`)
+  };

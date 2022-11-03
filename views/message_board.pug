@@ -1,23 +1,32 @@
 extends layout 
 
 block content
+  // decleare a re-usable piece of code aka mixin
+  mixin post(message)
+    div(class="message-card")
+      p#date #{message.date_formatted}
+      if user
+        h3 #{message.name}
+      else
+        h3 private member
+      p #{message.message}
+      button(class="delete-btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
+  // if user has logged-in present 
   if user
     h1 Welcome back #{user.username}
     a(href="/new") create new message
   else
     h4 Please login to add a message
     a(href="/log-in") Login
-
+  // display all posts onthe board
   div(class="message-board")
     h1= title  
     each message in messages    
-      div(class="message-card")
-        p#date #{message.date_formatted}
-        if user
-          h3 #{message.name}
-        else
-          h3 private member
-        p #{message.message}
+      +post(message)
     else
       p There are no messages.
+  // if user logged-in display log-out option
+  if user
     a(href="/log-out") log-out
+  // include delete form code piece
+  include includes/delete_form

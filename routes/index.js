@@ -32,4 +32,7 @@ router.route("/log-out",)
   });
 });
 
+router.route('/delete/:id')
+.post(message.delete_post)
+
 module.exports = router

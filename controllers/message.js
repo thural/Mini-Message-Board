@@ -70,3 +70,20 @@ exports.create_post = [
     }
   },
 ];
+
+exports.delete_post = (req, res, next) => {
+  if (req.params.id === "") return res.status(204).send() // avoid default on cancel
+  Message.deleteOne({_id: req.params.id})
+    .exec((err, message) => {
+      if (err) return next(err);
+      res.status(204).send() // avoid redirection after deleting
+
+      //Successful, so render
+      //console.log("user:", user)
+      // res.render("message_board", {
+      //   title: "Message Board",
+      //   messages,
+      //   user: req.user
+      // });
+    })
+};
