@@ -4,7 +4,6 @@ const Message = require("../models/message");
 
 const { body, validationResult } = require("express-validator");
 
-
 // Display list of all Messages.
 exports.board = (req, res, next) => {
   Message.find()
@@ -12,7 +11,7 @@ exports.board = (req, res, next) => {
     .exec((err, messages) => {
       if (err) return next(err);
       //Successful, so render
-      //console.log("user:", user)
+      //console.log("user:", req.user)
       res.render("message_board", {
         title: "Message Board",
         messages,
@@ -32,8 +31,8 @@ exports.create_get = (req, res, next) => {
 // Handle message create on POST.
 exports.create_post = [
   // Validate and sanitize the name field.
-  body("name", "name required").trim().isLength({ min: 3 }).escape(),
-  body("message", "message required").isLength({ min: 2 }).escape(),
+  body("message", "at least 2 characters required").isLength({ min: 2 }),
+  body("message", "max 64 characters allowed").isLength({ max: 64 }),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -41,7 +40,7 @@ exports.create_post = [
     const errors = validationResult(req);
 
     // Create a message object with escaped and trimmed data.
-    const message = new Message({ name: req.body.name, message: req.body.message });
+    const message = new Message({ username: req.user.username, message: req.body.message });
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
@@ -54,7 +53,7 @@ exports.create_post = [
     } else {
       // Data from form is valid.
       // Check if message with same name and message already exists.
-      Message.findOne({ name: req.body.name, message: req.body.message })
+      Message.findOne({ username: req.user.username, message: req.body.message })
         .exec((err, found_message) => {
           if (err) return next(err);
           if (found_message) res.redirect('/'); // redirect to message board.

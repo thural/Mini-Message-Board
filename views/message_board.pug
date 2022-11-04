@@ -2,15 +2,17 @@ extends layout
 
 block content
   // decleare a re-usable piece of code aka mixin
-  mixin post(message)
+  mixin post(message, user)
     div(class="message-card")
       p#date #{message.date_formatted}
       if user
-        h3 #{message.name}
+        h3 #{message.username}
       else
         h3 private member
       p #{message.message}
-      button(class="delete-btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
+      if user
+        if (user["admin"]==true) || (user.username == message.username)
+          button(class="delete-btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
   // if user has logged-in present 
   if user
     h1 Welcome back #{user.username}
@@ -22,11 +24,27 @@ block content
   div(class="message-board")
     h1= title  
     each message in messages    
-      +post(message)
+      +post(message, user)
     else
       p There are no messages.
   // if user logged-in display log-out option
   if user
     a(href="/log-out") log-out
+  script.
+    const posts = document.querySelectorAll(".message-card");
+    posts.forEach(card => {
+      card.addEventListener('mouseenter', e => {
+      const deleteBtn = e.target.querySelector('.delete-btn');
+      if (!deleteBtn) return
+      deleteBtn.style.visibility = "visible"
+      })
+    });
+    posts.forEach(card => {
+      card.addEventListener('mouseleave', e => {
+      const deleteBtn = e.target.querySelector('.delete-btn');
+      if (!deleteBtn) return
+      deleteBtn.style.visibility = "hidden"
+      })
+    });
   // include delete form code piece
   include includes/delete_form

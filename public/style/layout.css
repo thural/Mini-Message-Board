@@ -25,6 +25,11 @@ button:not(:last-child){
   margin-right: 1rem;
 }
 
+.delete-btn {
+  position:absolute;
+  visibility:hidden
+}
+
 message-form, .message-board {
   color: rgb(0, 65, 117);
   margin: auto;
@@ -95,4 +100,8 @@ message-form, .message-board {
 }
 .active {
   display: flex
+}
+
+btn-active {
+  display:block
 }

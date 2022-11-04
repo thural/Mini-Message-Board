@@ -9,6 +9,10 @@ block content
       input.form-input(type='password', name='password', placeholder="password", value=user.password)
     button(class="submit-btn", type='submit') Log-in
 
+  h4 don't have an account?
+    | 
+    a(href="/sign-up") Sign-up
+
   if errors
    ul
     for error in errors
