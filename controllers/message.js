@@ -1,8 +1,10 @@
 // require Message model
 const Message = require("../models/message");
+const dirty_words = require("../dirty_words");
 // require bad word filter module
 const Filter = require('bad-words');
 const customFilter = new Filter({ placeHolder: '*'});
+customFilter.addWords(...dirty_words);
 // const async = require("async");
 
 const { body, validationResult } = require("express-validator");
@@ -45,8 +47,14 @@ exports.create_post = [
   body("message", "max 64 characters allowed").isLength({ max: 64 }),
   body("message")
   .custom((value, { req }) => {
-    if (customFilter.isProfane(value)) return false
-    else return true;
+    if (customFilter.isProfane(value)) return false;
+    // regex match against the list of bad words
+    const does_match = dirty_words.some(word => {
+      const regex = new RegExp(`\\s${word}\\s|mother\\w+|sister\\w+`, 'i');
+      return regex.test(value)
+    });
+    if (does_match) return false;
+    return true;
   }).withMessage("Your message can not contain bad words"),
 
   // Process request after validation and sanitization.
