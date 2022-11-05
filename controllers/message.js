@@ -10,6 +10,12 @@ exports.board = (req, res, next) => {
     .sort([["date", "descending"]])
     .exec((err, messages) => {
       if (err) return next(err);
+      if (req.user) { // if user logged in bring user's post to the top
+        const userPost = messages.find(elem => elem.username == req.user.username);
+        const postIndex = messages.findIndex(elem => elem.username == req.user.username);
+        messages.splice(postIndex, 1);
+        messages.unshift(userPost);
+      };
       //Successful, so render
       //console.log("user:", req.user)
       res.render("message_board", {
