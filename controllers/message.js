@@ -1,5 +1,8 @@
 // require Message model
 const Message = require("../models/message");
+// require bad word filter module
+const Filter = require('bad-words');
+const customFilter = new Filter({ placeHolder: '*'});
 // const async = require("async");
 
 const { body, validationResult } = require("express-validator");
@@ -11,13 +14,14 @@ exports.board = (req, res, next) => {
     .exec((err, messages) => {
       if (err) return next(err);
       if (req.user) { // if user logged in bring user's post to the top
-        const userPost = messages.find(elem => elem.username == req.user.username);
-        const postIndex = messages.findIndex(elem => elem.username == req.user.username);
+        const postIndex = messages.findIndex(elem => elem.username === req.user.username);
+        if (postIndex !== -1){
+        const userPost = messages[postIndex];
         messages.splice(postIndex, 1);
         messages.unshift(userPost);
+        }
       };
       //Successful, so render
-      //console.log("user:", req.user)
       res.render("message_board", {
         title: "Message Board",
         messages,
@@ -39,6 +43,11 @@ exports.create_post = [
   // Validate and sanitize the name field.
   body("message", "at least 2 characters required").isLength({ min: 2 }),
   body("message", "max 64 characters allowed").isLength({ max: 64 }),
+  body("message")
+  .custom((value, { req }) => {
+    if (customFilter.isProfane(value)) return false
+    else return true;
+  }).withMessage("Your message can not contain bad words"),
 
   // Process request after validation and sanitization.
   (req, res, next) => {

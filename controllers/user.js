@@ -1,5 +1,8 @@
 // Import User model
 const User = require("../models/user")
+// require bad word filter module
+const Filter = require('bad-words');
+const customFilter = new Filter({ placeHolder: '*'});
 // Import validators
 const { body, validationResult } = require("express-validator");
 // Inport passport authenticator
@@ -34,6 +37,12 @@ exports.create_post = [
   .isLength({ min: 3, max: 12 })
   .withMessage('user name must be at least 3 and max 12 chars long')
   .escape(),
+
+  body("username")
+  .custom((value, { req }) => {
+    if (customFilter.isProfane(value)) return false
+    else return true;
+  }).withMessage("User name can not contain bad words"),
 
   body("password", "password required")
   .isLength({ min: 6, max: 16 })
