@@ -1,13 +1,12 @@
 body {
-  padding: 3rem
+  background-color: darkorange;
+  font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell
 }
 
 .container {
   margin: auto;
-  padding: 4rem;
   height: 100%;
   width: fit-content;
-  background-color: whitesmoke;
   border-radius: 1rem;
 }
 
@@ -25,22 +24,44 @@ button:not(:last-child){
   margin-right: 1rem;
 }
 
+input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  height: 1.8rem;
+  background-color: #e2e8f0;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #a7abb1;
+}
+
 .delete-btn {
   position:absolute;
   visibility:hidden
 }
 
-message-form, .message-board {
+.signup-form, .message-form, .message-board {
   color: rgb(0, 65, 117);
   margin: auto;
   display: flex;
   flex-flow: column nowrap;
-  gap: 10px;
+  gap: 1rem;
+}
+
+.message-form, .signup-form, .login-form{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .message-form,
 .message-card,
-.signup-fom,
+.signup-form,
 .login-form {
   display: flex;
   min-width: 300px;
@@ -49,14 +70,21 @@ message-form, .message-board {
   padding: 1rem;
   gap: 0.5rem;
   border-radius: 1em;
+  color: black;
+  box-shadow: 4px 4px lightsteelblue;
 }
 
 .message-board{
   padding: 3rem;
   margin: 3rem auto;
-  border: 4px solid aliceblue;
+  border: 4px solid whitesmoke;
   border-radius: 2rem;
-  background-color: lightblue;
+  background-color: purple;
+  box-shadow: 4px 4px purple;
+}
+.message-board h1 {
+  color: white;
+  margin-top: 0;
 }
 
 .input-area {
@@ -104,4 +132,10 @@ message-form, .message-board {
 
 btn-active {
   display:block
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+  margin: 1rem 0;
 }

@@ -16,10 +16,12 @@ block content
   // if user has logged-in present 
   if user
     h1 Welcome back #{user.username}
-    a(href="/new") create new message
+    a(href="/log-out", "style"="display:block") log-out
+    a(href="/new", "style"="margin:1rem") create new message
   else
     h4 Please login to add a message
     a(href="/log-in") Login
+
   // display all posts onthe board
   div(class="message-board")
     h1= title  
@@ -27,9 +29,7 @@ block content
       +post(message, user)
     else
       p There are no messages.
-  // if user logged-in display log-out option
-  if user
-    a(href="/log-out") log-out
+
   script.
     const posts = document.querySelectorAll(".message-card");
     posts.forEach(card => {
