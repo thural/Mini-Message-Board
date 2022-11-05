@@ -5,8 +5,9 @@ block content
 
   form(class='signup-form', method='POST', action='')
     div.input-area
-      input.form-input(type='text', name='username', placeholder="username", value=user.username)
-      input.form-input(type='password', name='password', placeholder="password", value=user.password)
+      input.form-input(type='text', name='username', placeholder="username")
+      input.form-input(type='password', name='password', placeholder="password")
+      input.form-input(type='password', name='confirmPassword', placeholder="repeat password")
     button(class="submit-btn", type='submit') Sign-up
 
   if errors

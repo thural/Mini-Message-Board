@@ -29,8 +29,25 @@ exports.create_get = (req, res) => res.render("signup_form", {
 // Handle user create on POST.
 exports.create_post = [
   // Validate and sanitize the form fields.
-  body("username", "username required").trim().isLength({ min: 3 }).escape(),
-  body("password", "password required").isLength({ min: 6 }).escape(),
+  body("username", "username required")
+  .trim()
+  .isLength({ min: 3, max: 12 })
+  .withMessage('user name must be at least 3 and max 12 chars long')
+  .escape(),
+
+  body("password", "password required")
+  .isLength({ min: 6, max: 16 })
+  .withMessage('password must be at least 6 and max 16 chars long')
+  .escape(),
+
+  body("confirmPassword")
+  .notEmpty()
+  .withMessage("Password fields can not be empty.")
+  .custom((value, { req }) => {
+    if (value === req.body.password) return true
+    else return false;
+  })
+  .withMessage("Passwords does not match."),
   // Process request after validation and sanitization.
   (req, res, next) => {
     // Extract the validation errors from a request.
