@@ -50,7 +50,7 @@ exports.create_post = [
     if (customFilter.isProfane(value)) return false;
     // regex match against the list of bad words
     const does_match = dirty_words.some(word => {
-      const regex = new RegExp(`\\s${word}\\s|mother\\w+|sister\\w+`, 'i');
+      const regex = new RegExp(`\\s${word}\\s|mother.+|sister.+`, 'i');
       return regex.test(value)
     });
     if (does_match) return false;
