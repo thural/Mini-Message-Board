@@ -40,6 +40,61 @@ exports.create_get = (req, res, next) => {
   })
 };
 
+// Display message edit form on PATCH.
+exports.edit_get = (req, res, next) => {
+  Message.findOne({"username": req.user.username}).exec((err, message) =>{
+    res.render("message_form", {
+      title: "Edit Message",
+      data: { name: req.user.username, message: message.message }
+    })
+  })
+};
+
+// Handle message edit on PATCH.
+exports.edit_post = [
+  // Validate and sanitize the name field.
+  body("message", "at least 2 characters required").isLength({ min: 2 }),
+  body("message", "max 64 characters allowed").isLength({ max: 64 }),
+  body("message").custom((value, { req }) => {
+    if (customFilter.isProfane(value)) return false;
+    // regex match against the list of bad words
+    const does_match = dirty_words.some(word => {
+      const regex = new RegExp(`\\s${word}\\s|mother.+|sister.+`, 'i');
+      return regex.test(value)
+    });
+    if (does_match) return false;
+    return true;
+  }).withMessage("Your message can not contain bad words"),
+
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Find the user message object and edit message property.
+    Message.findOne({"username": req.user.username}).exec((err, message) => {
+      message.message = req.body.message;
+      if (!errors.isEmpty()) {
+        // There are errors. Render the form again with sanitized values/error messages.
+        res.render("message_form", {
+          title: "Edit Message",
+          method: 'POST',
+          data: message,
+          errors: errors.array(),
+        });
+        return
+      } else {
+          // Data from form is valid, attempt saving to db
+          message.save((err) => {
+            if (err) return next(err);
+            // Message saved. Redirect to message board page.
+            res.redirect('/');
+          });
+        }
+    })
+  },
+];
+
 // Handle message create on POST.
 exports.create_post = [
   // Validate and sanitize the name field.
@@ -69,6 +124,7 @@ exports.create_post = [
       // There are errors. Render the form again with sanitized values/error messages.
       res.render("message_form", {
         title: "Create Message",
+        method: 'POST',
         data: message,
         errors: errors.array(),
       });

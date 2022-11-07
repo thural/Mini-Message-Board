@@ -13,6 +13,8 @@ block content
       if user
         if (user["admin"]==true) || (user.username == message.username)
           button(class="delete-btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
+          button(class="edit-btn")
+           a(href="/edit") edit
   // if user has logged-in present 
   if user
     h1 Welcome back #{user.username}

@@ -23,6 +23,11 @@ router.route("/new")
 .get(message.create_get)
 .post(message.create_post);
 
+// requests for editing a Message
+router.route("/edit")
+.get(message.edit_get)
+.post(message.edit_post);
+
 // request for logging-out
 router.route("/log-out",)
 .get((req, res, next) => {
