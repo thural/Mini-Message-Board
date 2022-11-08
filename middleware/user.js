@@ -1,5 +1,9 @@
 // Import User model
 const User = require("../models/user");
+// Import validators
+const { validationResult } = require("express-validator");
+// require password encryptor
+const bcrypt = require("bcryptjs");
 
 // middleware to process validation and sanitization.
 module.exports.validateUser = (req, res, next) => {
@@ -14,8 +18,7 @@ module.exports.validateUser = (req, res, next) => {
       user: req.user,
       errors: errors.array()
     })
-  }
-  next()
+  } next()
 };
 
 // middleware to save user to db

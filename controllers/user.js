@@ -1,12 +1,11 @@
-const {validateUser, saveUser} = require("../middleware/user")
+const { validateUser, saveUser } = require("../middleware/user")
 // require bad word filter module
 const Filter = require('bad-words');
 const customFilter = new Filter({ placeHolder: '*' });
 // Import validators
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 // Inport passport authenticator
 const passport = require("passport");
-const bcrypt = require("bcryptjs");
 
 // Handle user log-in on GET.
 exports.login_get = (req, res) => res.render("login_form", {
