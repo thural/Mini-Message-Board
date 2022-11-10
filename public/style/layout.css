@@ -21,7 +21,7 @@ button {
 }
 
 button:not(:last-child){
-  margin-right: 1rem;
+  margin-right: 4rem;
 }
 
 input {
@@ -39,7 +39,7 @@ input:focus {
   border-color: #a7abb1;
 }
 
-.delete-btn {
+.card.btn {
   position:absolute;
   visibility:hidden
 }

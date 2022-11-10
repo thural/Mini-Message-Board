@@ -1,9 +1,10 @@
 extends layout 
 
 block content
-  // decleare a re-usable piece of code aka mixin
+  // decleare a re-usable piece of code aka mixin, a post card
   mixin post(message, user)
-    div(class="message-card")
+    - const currentPost = (message.username === user.username)
+    div(class="message-card", "currentpost"=`${currentPost}`)
       p#date #{message.date_formatted}
       if user
         h3 #{message.username}
@@ -12,10 +13,10 @@ block content
       p #{message.message}
       if user
         if (user["admin"]==true) || (user.username == message.username)
-          button(class="delete-btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
-          button(class="edit-btn")
+          button(class="card btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
+          button(class="card btn")
            a(href="/edit") edit
-  // if user has logged-in present 
+  // if user has logged-in 
   if user
     h1 Welcome back #{user.username}
     a(href="/log-out", "style"="display:block") log-out
@@ -33,20 +34,18 @@ block content
       p There are no messages.
 
   script.
-    const posts = document.querySelectorAll(".message-card");
-    posts.forEach(card => {
-      card.addEventListener('mouseenter', e => {
-      const deleteBtn = e.target.querySelector('.delete-btn');
-      if (!deleteBtn) return
-      deleteBtn.style.visibility = "visible"
-      })
-    });
-    posts.forEach(card => {
+    const card = document.querySelector("[currentpost=true]");
+
+    card.addEventListener('mouseenter', e => {
+        const cardBtns = e.target.querySelectorAll('.card.btn');
+        if (!cardBtns) return
+        cardBtns.forEach(cardBtn => cardBtn.style.visibility = "visible")
+      });
+
       card.addEventListener('mouseleave', e => {
-      const deleteBtn = e.target.querySelector('.delete-btn');
-      if (!deleteBtn) return
-      deleteBtn.style.visibility = "hidden"
+        const cardBtns = e.target.querySelectorAll('.card.btn');
+        if (!cardBtns) return
+        cardBtns.forEach(cardBtn => cardBtn.style.visibility = "hidden")
       })
-    });
   // include delete form code piece
   include includes/delete_form
