@@ -3,7 +3,10 @@ extends layout
 block content
   // decleare a re-usable piece of code aka mixin, a post card
   mixin post(message, user)
-    - const currentPost = (message.username === user.username)
+    - let currentPost = false
+    if user
+      - currentPost = (message.username === user.username)
+
     div(class="message-card", "currentpost"=`${currentPost}`)
       p#date #{message.date_formatted}
       if user
@@ -20,7 +23,11 @@ block content
   if user
     h1 Welcome back #{user.username}
     a(href="/log-out", "style"="display:block") log-out
-    a(href="/new", "style"="margin:1rem") create new message
+    - const alreadyPosted = messages.find(message => message.username === user.username)
+    if alreadyPosted
+      p hover over your post to modify
+    else
+      a(href="/new", "style"="margin:1rem") create new message
   else
     h4 Please login to add a message
     a(href="/log-in") Login

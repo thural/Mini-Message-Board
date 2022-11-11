@@ -76,11 +76,22 @@ input:focus {
 
 .message-board{
   padding: 3rem;
-  margin: 3rem auto;
+  margin: 1rem auto;
   border: 4px solid whitesmoke;
   border-radius: 2rem;
   background-color: purple;
   box-shadow: 4px 4px purple;
+  overflow-y: scroll;
+  overflow-x: auto;
+  max-height: 64vh;
+  
+}
+.message-board::-webkit-scrollbar {
+  display: none;
+}
+.message-board {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 .message-board h1 {
   color: white;
