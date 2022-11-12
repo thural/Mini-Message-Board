@@ -38,6 +38,9 @@ router.route("/log-out",)
 });
 
 router.route('/delete/:id')
-.post(message.delete_post)
+.post(message.delete_post);
+
+router.route('/like/:id')
+.post(message.like_post);
 
 module.exports = router

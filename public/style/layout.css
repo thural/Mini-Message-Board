@@ -11,17 +11,18 @@ body {
 }
 
 button {
-  all: unset;
   width: fit-content;
-  align-self: end;
+  /*align-self: end;*/
   background-color: black;
   color: white;
   padding: 4px 8px;
   border-radius: 1rem;
 }
 
-button:not(:last-child){
-  margin-right: 4rem;
+.btns{
+  display:flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 input {
@@ -39,9 +40,25 @@ input:focus {
   border-color: #a7abb1;
 }
 
-.card.btn {
+.message-card {
+  position: relative
+}
+
+.btns {
   position:absolute;
-  visibility:hidden
+  top: 1rem;
+  right: 1rem;
+}
+
+.card.btn {
+  all:unset;
+  /*visibility:hidden;*/
+  width: fit-content;
+  align-self: end;
+  background-color: black;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 1rem;
 }
 
 .signup-form, .message-form, .message-board {

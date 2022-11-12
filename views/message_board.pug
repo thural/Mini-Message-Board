@@ -1,13 +1,13 @@
 extends layout 
 
 block content
-  // decleare a re-usable piece of code aka mixin, a post card
+  // decleare a re-usable piece of code aka mixin, a post cards
   mixin post(message, user)
     - let currentPost = false
     if user
       - currentPost = (message.username === user.username)
 
-    div(class="message-card", "currentpost"=`${currentPost}`)
+    div(class="message-card" "currentpost"=`${currentPost}`)
       p#date #{message.date_formatted}
       if user
         h3 #{message.username}
@@ -15,10 +15,16 @@ block content
         h3 private member
       p #{message.message}
       if user
-        if (user["admin"]==true) || (user.username == message.username)
-          button(class="card btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
-          button(class="card btn")
-           a(href="/edit") edit
+        .btns("style"="visibility:hidden")
+          button(class="cards btn", id=message["_id"], onclick=`handleLike("${"" + message._id}")`)
+            if user.likes.includes(message._id)
+              | unlike
+            else
+              | like
+          if (user["admin"]==true) || (user.username == message.username)
+            button(class="cards btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
+            button(class="cards btn")
+              a(href="/edit") edit
   // if user has logged-in 
   if user
     h1 Welcome back #{user.username}
@@ -41,18 +47,24 @@ block content
       p There are no messages.
 
   script.
-    const card = document.querySelector("[currentpost=true]");
+    const cards = document.querySelectorAll(".message-card");
 
-    card.addEventListener('mouseenter', e => {
-        const cardBtns = e.target.querySelectorAll('.card.btn');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', e => {
+        const cardBtns = e.target.querySelectorAll('button');
         if (!cardBtns) return
         cardBtns.forEach(cardBtn => cardBtn.style.visibility = "visible")
       });
+    })
 
+    cards.forEach(card => {
       card.addEventListener('mouseleave', e => {
-        const cardBtns = e.target.querySelectorAll('.card.btn');
+        const cardBtns = e.target.querySelectorAll('button');
         if (!cardBtns) return
         cardBtns.forEach(cardBtn => cardBtn.style.visibility = "hidden")
-      })
+      });
+    })
+
   // include delete form code piece
   include includes/delete_form
+  include includes/like_form

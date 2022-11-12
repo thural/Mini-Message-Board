@@ -6,7 +6,8 @@ const Schema = mongoose.Schema;
 const MessageSchema = new Schema({
   username: { type: String, required: true, maxLength: 16 },
   message: { type: String, required: true, maxLength: 100 },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Virtual property to get formmated date

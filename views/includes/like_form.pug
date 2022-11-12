@@ -1,0 +1,12 @@
+form(class="like-form" method="post" action="")
+
+// always place script after declring the dom elements
+script.
+  const likeForm = document.querySelector('.like-form');
+  //let messageID = null;
+
+  function handleLike(id){
+    messageID = id;
+    likeForm.setAttribute('action', `/like/${id}`)
+    likeForm.submit()
+  };

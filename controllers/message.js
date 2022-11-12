@@ -1,5 +1,6 @@
 // require Message model
 const Message = require("../models/message");
+const User = require("../models/user");
 const dirty_words = require("../dirty_words");
 // require bad word filter module
 const Filter = require('bad-words');
@@ -123,4 +124,13 @@ exports.delete_post = (req, res, next) => {
       //   user: req.user
       // });
     })
+}
+
+exports.like_post = async (req, res, next) => {
+  if (req.params.id === "") return res.status(204).send() // avoid default response
+    try {
+      await Message.updateOne({ _id: req.params.id }, {"$push": {likes:req.user._id}})
+      await User.updateOne({_id:req.user._id}, {"$push":{likes:req.params.id}})
+      res.status(204).send() // avoid redirection and re-rendering
+    } catch(err) {return next(err)}
 }
