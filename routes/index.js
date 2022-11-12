@@ -43,4 +43,7 @@ router.route('/delete/:id')
 router.route('/like/:id')
 .post(message.like_post);
 
+router.route('/unlike/:id')
+.post(message.unlike_post);
+
 module.exports = router

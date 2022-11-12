@@ -9,4 +9,22 @@ script.
     messageID = id;
     likeForm.setAttribute('action', `/like/${id}`)
     likeForm.submit()
+    refreshButtonView()
   };
+
+  function handleUnlike(id){
+    messageID = id;
+    likeForm.setAttribute('action', `/unlike/${id}`)
+    likeForm.submit()
+    refreshButtonView()
+  };
+
+  function refreshButtonView() {
+    const likebutton = document.getElementById(messageID)
+    console.log(
+      "messageID: ", messageID,
+      "button: ", likebutton,
+    )
+    if (likebutton.textContent === 'like') likebutton.textContent = 'unlike'
+    else likebutton.textContent = 'like'
+  }

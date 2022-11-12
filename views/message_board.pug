@@ -16,11 +16,11 @@ block content
       p #{message.message}
       if user
         .btns("style"="visibility:hidden")
-          button(class="cards btn", id=message["_id"], onclick=`handleLike("${"" + message._id}")`)
-            if user.likes.includes(message._id)
-              | unlike
-            else
-              | like
+          if user.likes.includes(message._id)
+            button(class="cards btn like", id=message["_id"], onclick=`handleUnlike("${"" + message._id}")`) unlike
+          else if !currentPost
+            button(class="cards btn like", id=message["_id"], onclick=`handleLike("${"" + message._id}")`) like
+          else 
           if (user["admin"]==true) || (user.username == message.username)
             button(class="cards btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
             button(class="cards btn")
