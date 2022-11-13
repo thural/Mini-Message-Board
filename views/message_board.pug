@@ -1,14 +1,32 @@
-extends layout 
+extends layout
+
+block navigation 
+  // if user has logged-in
+  if user
+    p Welcome back,
+      h2 #{user.username}
+    a(href="/log-out") log-out
+
+    if messages // TODO: Fix bug on this line
+      - const alreadyPosted = messages.find(message => message.username === user.username)
+    if alreadyPosted
+      p hover over your post to modify
+    else // TODO: move add message to message board
+      a(href="/new") create new message
+  else
+    h4 Please login to post
+    a(href="/log-in") Login
 
 block content
-  // decleare a re-usable piece of code aka mixin, a post cards
+  // decleare a re-usable component/mixin for message card
   mixin post(message, user)
     - let currentPost = false
     if user
       - currentPost = (message.username === user.username)
 
-    div(class="message-card" "currentpost"=`${currentPost}`)
-      p#date #{message.date_formatted}
+    .message-card("currentpost"=`${currentPost}`)
+      .post-info
+        p#date #{message.date_formatted}
       if user
         h3 #{message.username}
       else
@@ -20,31 +38,19 @@ block content
             button(class="cards btn like", id=message["_id"], onclick=`handleUnlike("${"" + message._id}")`) unlike
           else if !currentPost
             button(class="cards btn like", id=message["_id"], onclick=`handleLike("${"" + message._id}")`) like
-          else 
           if (user["admin"]==true) || (user.username == message.username)
             button(class="cards btn", id=message["_id"], onclick=`handleDelete("${"" + message._id}")`) delete
             button(class="cards btn")
               a(href="/edit") edit
-  // if user has logged-in 
-  if user
-    h1 Welcome back #{user.username}
-    a(href="/log-out", "style"="display:block") log-out
-    - const alreadyPosted = messages.find(message => message.username === user.username)
-    if alreadyPosted
-      p hover over your post to modify
-    else
-      a(href="/new", "style"="margin:1rem") create new message
-  else
-    h4 Please login to add a message
-    a(href="/log-in") Login
 
-  // display all posts onthe board
-  div(class="message-board")
-    h1= title  
-    each message in messages    
-      +post(message, user)
-    else
-      p There are no messages.
+  // list all posts on the board
+  .message-board
+    h1= title
+    .post-container
+      each message in messages    
+        +post(message, user)
+      else
+        p There are no messages.
 
   script.
     const cards = document.querySelectorAll(".message-card");
@@ -54,7 +60,7 @@ block content
         const cardBtns = e.target.querySelectorAll('button');
         if (!cardBtns) return
         cardBtns.forEach(cardBtn => cardBtn.style.visibility = "visible")
-      });
+      })
     })
 
     cards.forEach(card => {
@@ -62,7 +68,7 @@ block content
         const cardBtns = e.target.querySelectorAll('button');
         if (!cardBtns) return
         cardBtns.forEach(cardBtn => cardBtn.style.visibility = "hidden")
-      });
+      })
     })
 
   // include delete form code piece

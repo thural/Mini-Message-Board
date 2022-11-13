@@ -13,7 +13,7 @@ script.
   function hideForm() {
     deleteForm.classList.remove('active')
     overlay.classList.remove('active')
-  };
+  }
 
   function removeDeletedElem() {
     const childElem = document.getElementById(messageID)
@@ -25,4 +25,4 @@ script.
     overlay.classList.toggle('active');
     deleteForm.classList.toggle('active');
     deleteForm.setAttribute('action', `/delete/${id}`)
-  };
+  }
