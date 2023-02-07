@@ -7,11 +7,11 @@ block navigation
       h2 #{user.username}
     a(href="/log-out") log-out
 
-    if messages // TODO: Fix bug on this line
+    if messages
       - const alreadyPosted = messages.find(message => message.username === user.username)
     if alreadyPosted
       p hover over your post to modify
-    else // TODO: move add message to message board
+    else
       a(href="/new") create new message
   else
     h4 Please login to post
